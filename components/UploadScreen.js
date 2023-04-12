@@ -9,6 +9,12 @@ const UploadScreen = () => {
   const [image, setImage] = useState(null)
   const [uploading, setUploading] = useState(false)
 
+  // Create the file metadata
+  /** @type {any} */
+  const metadata = {
+    contentType: 'image/jpeg'
+  };
+
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -27,7 +33,7 @@ const UploadScreen = () => {
     const blob = response.blob();
     const filename = image.uri.substring(image.uri.lastIndexOf('/') + 1);
     const storageRef = ref(storage, 'images/' + filename);
-    const uploadTask = uploadBytesResumable(storageRef, blob);
+    const uploadTask = uploadBytesResumable(storageRef, blob, metadata);
 
     // Listen for state changes, errors, and completion of the upload.
     uploadTask.on('state_changed',
